@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absent Hours Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-xl rounded-lg p-10 w-full max-w-2xl">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">Predict Absent Hours</h2>
+        <form method="POST" class="space-y-4">
+            <div>
+                <label class="block text-gray-600">Gender</label>
+                <select name="gender" class="w-full border rounded px-3 py-2">
+                    {% for val in gender_options %}<option value="{{ val }}">{{ val }}</option>{% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-600">City</label>
+                <select name="city" class="w-full border rounded px-3 py-2">
+                    {% for val in city_options %}<option value="{{ val }}">{{ val }}</option>{% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-600">Job Title</label>
+                <select name="jobtitle" class="w-full border rounded px-3 py-2">
+                    {% for val in jobtitle_options %}<option value="{{ val }}">{{ val }}</option>{% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-600">Department</label>
+                <select name="department" class="w-full border rounded px-3 py-2">
+                    {% for val in department_options %}<option value="{{ val }}">{{ val }}</option>{% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-600">Store Location</label>
+                <select name="storelocation" class="w-full border rounded px-3 py-2">
+                    {% for val in store_location_options %}<option value="{{ val }}">{{ val }}</option>{% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-600">Division</label>
+                <select name="division" class="w-full border rounded px-3 py-2">
+                    {% for val in division_options %}<option value="{{ val }}">{{ val }}</option>{% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-600">Business Unit</label>
+                <select name="businessunit" class="w-full border rounded px-3 py-2">
+                    {% for val in business_unit_options %}<option value="{{ val }}">{{ val }}</option>{% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-600">Age</label>
+                <input type="number" step="any" name="age" required class="w-full border rounded px-3 py-2">
+            </div>
+
+            <div>
+                <label class="block text-gray-600">Length of Service</label>
+                <input type="number" step="any" name="lengthservice" required class="w-full border rounded px-3 py-2">
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded">Predict</button>
+            </div>
+        </form>
+
+        <div class="text-center mt-6">
+            <a href="/categorize" class="text-sm text-blue-600 hover:underline">View Categorized Employee List</a>
+        </div>
+
+        {% if prediction is not none %}
+            <div class="mt-6 text-center text-lg">
+                <p class="text-gray-700">Predicted Absent Hours: <strong>{{ prediction | round(2) }}</strong></p>
+
+                {% set category = '' %}
+                {% set category_class = '' %}
+                {% if prediction <= 0 %}
+                    {% set category = 'Perfect Attendance' %}
+                    {% set category_class = 'text-green-600' %}
+                {% elif prediction <= 20 %}
+                    {% set category = 'Reliable Contributor' %}
+                    {% set category_class = 'text-blue-600' %}
+                {% elif prediction <= 50 %}
+                    {% set category = 'Generally Dependable' %}
+                    {% set category_class = 'text-yellow-600' %}
+                {% elif prediction <= 100 %}
+                    {% set category = 'Needs Flexibility Support' %}
+                    {% set category_class = 'text-orange-600' %}
+                {% else %}
+                    {% set category = 'Engagement Follow-up Needed' %}
+                    {% set category_class = 'text-red-600' %}
+                {% endif %}
+
+                <p class="mt-2 font-medium {{ category_class }}">Category: {{ category }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
